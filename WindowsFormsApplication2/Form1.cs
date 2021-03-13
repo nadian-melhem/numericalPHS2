@@ -14,7 +14,9 @@ namespace WindowsFormsApplication2
     {
         double xPrev;
         double yPrev;
-        double xNew, yNew;
+        double xNew, yNew ;
+        private bool founded=false;
+
         public Form1()
         {
             InitializeComponent();
@@ -23,7 +25,8 @@ namespace WindowsFormsApplication2
 
         private void run_Click(object sender, EventArgs e)
         {
-            int i = int.Parse(numOfIterations.Text);
+            founded = false;
+            int i = 100;
             xPrev = double.Parse(xZero.Text);
             yPrev = double.Parse(yZero.Text);
             while (i>0)
@@ -32,16 +35,21 @@ namespace WindowsFormsApplication2
                 yNew = xPrev - ((v(xPrev, yPrev) * divUx(xPrev, yPrev) - u(xPrev, yPrev) * divVx(xPrev, yPrev)) / jacobian(xPrev, yPrev));
                 xPrev = xNew;
                 yPrev = yNew;
+                if (u(xNew, yNew) == 0 && v(xNew, yNew) == 0)
+                {
+                    founded = true;
+                    break;
+                }
                 i--;
 
             }
-            if (xNew.ToString() != "NaN"|| yFinal.ToString() != "NaN")
+            if (founded)
             {
                 xFinal.Text = xNew.ToString();
                 yFinal.Text = yNew.ToString();
             }
             else
-                MessageBox.Show("Please Try another intervel");
+                MessageBox.Show("Please Try another intervel because the functon is Divergent here");
         }
         private double u(double x,double y)
         {
@@ -67,7 +75,18 @@ namespace WindowsFormsApplication2
         {
             return -x / Math.Pow(x*y, 0.5);
         }
-        private  double jacobian(double x, double y)
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private double jacobian(double x, double y)
         {
             return (divUx(x, y) * divVy(x, y)) - (divUy(x, y) * divVx(x, y));
         }
